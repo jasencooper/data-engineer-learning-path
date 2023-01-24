@@ -41,7 +41,7 @@ conn = sqlite3.connect(db_temp_path)
 c = conn.cursor()
 c.execute('CREATE TABLE IF NOT EXISTS users (user_id string, user_first_touch_timestamp decimal(20,0), email string)')
 conn.commit()
-df = pd.read_parquet(path = datasource_path.replace("dbfs:/", '/dbfs/'))
+df = spark.read.parquet(datasource_path).toPandas()
 df.to_sql('users', conn, if_exists='replace', index = False)
 
 # Move the temp db to the final location
